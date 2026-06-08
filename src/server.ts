@@ -24,6 +24,18 @@ export interface RenderOpts {
 }
 
 export function render(opts: RenderOpts): string {
+  if (typeof opts?.template !== 'string') {
+    throw new Error('`template` is required and must be a string');
+  }
+  if (opts.view === null || typeof opts.view !== 'object') {
+    throw new Error('`view` is required and must be an object');
+  }
+  if (
+    opts.partials !== undefined &&
+    (opts.partials === null || typeof opts.partials !== 'object')
+  ) {
+    throw new Error('`partials` must be an object when provided');
+  }
   return Mustache.render(opts.template, opts.view, opts.partials);
 }
 

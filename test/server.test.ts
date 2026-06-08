@@ -50,3 +50,29 @@ test('partials', () => {
 test('missing variable renders empty', () => {
   assert.equal(render({ template: '[{{missing}}]', view: {} }), '[]');
 });
+
+test('rejects non-string template', () => {
+  assert.throws(
+    () => render({ template: 123 as unknown as string, view: {} }),
+    /`template` is required and must be a string/,
+  );
+});
+
+test('rejects missing view', () => {
+  assert.throws(
+    () => render({ template: '{{x}}', view: undefined as unknown as Record<string, unknown> }),
+    /`view` is required and must be an object/,
+  );
+});
+
+test('rejects non-object partials', () => {
+  assert.throws(
+    () =>
+      render({
+        template: '{{x}}',
+        view: { x: 1 },
+        partials: 'nope' as unknown as Record<string, string>,
+      }),
+    /`partials` must be an object when provided/,
+  );
+});
